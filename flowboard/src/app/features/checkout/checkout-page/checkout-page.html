@@ -1,0 +1,75 @@
+<form class="checkout-form"
+    [formGroup]="form"
+    (submit)="onSubmit()">
+
+    @if (showSummary && form.invalid) {
+        <div class="error-summary"
+    role="status"
+    aria-live="polite">
+        <p>Il form contiene errori. Controlla i campi digitati prima di procedere.</p>
+</div>
+    }
+
+    <section formGroupName="customer">
+        <h2>Dati cliente</h2>
+        <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            @if (hasError('customer.firstName','required')) {
+            <mat-error>
+            Il nome è obbligatorio.
+            </mat-error>
+            }
+            <input matInput formControlName="firstName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+             <mat-label>Cognome</mat-label>
+            <input matInput formControlName="lastName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+             <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            @if (hasError('customer.email','email')) {
+                <mat-error>L'email è obbligatoria</mat-error>
+            }
+        </mat-form-field>
+</section>
+
+        <div formGroupName="address">
+            <h2>Indirizzo</h2>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Via</mat-label>
+                <input matInput formControlName="street" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>CAP</mat-label>
+                <input matInput formControlName="zip" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Città</mat-label>
+                <input matInput formControlName="city" />
+            </mat-form-field>
+        </div>
+
+        <mat-select formControlName="shippingMethod" placeholder="Metodo di spedizione">
+            <mat-option value="standard">Spedizione standard (3-5 giorni) - €5.00</mat-option>
+            <mat-option value="standard">Spedizione express (1-2 giorni) - €15.00</mat-option>
+        </mat-select>
+
+        <mat-checkbox formControlName="privacy">
+            Accetto termini di vendita e privacy
+        </mat-checkbox>
+
+        <div>
+        <button mat-raised-button
+        color="primary"
+        type="submit">
+        Conferma ordine
+        </button>
+        </div>
+    
+</form>
