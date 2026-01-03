@@ -12,4 +12,9 @@ export class ProductService {
   constructor(private readonly http: HttpClient) {}
     list(): Observable<Product[]> {
         return this.http.get<Product[]>(`${this.baseUrl}/products`);
-}}
+}
+  //id prodotto come stringa
+    getProductById(id: string): Observable<Product> {
+  return this.http.get<Product>(`${this.baseUrl}/products/${id}`);
+}
+}

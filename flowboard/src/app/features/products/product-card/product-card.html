@@ -1,4 +1,4 @@
-<mat-card class="mat-card" appearance="outlined">
+<mat-card class="mat-card" appearance="outlined" [routerLink]="['/products', product.id]">
   <mat-card-header>
     <mat-card-title>{{ product.title }}</mat-card-title>
     <mat-card-subtitle>{{ product.price | currency:'EUR' }}</mat-card-subtitle>
