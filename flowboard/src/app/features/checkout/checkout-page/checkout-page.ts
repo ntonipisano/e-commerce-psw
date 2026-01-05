@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +21,9 @@ import { Order } from '../../../core/models/order';
     MatCheckboxModule,
     MatSelect,
     MatOption,
-    MatAnchor
+    MatAnchor,
+    CurrencyPipe,
+    AsyncPipe
 ],
   templateUrl: './checkout-page.html',
   styleUrls: ['./checkout-page.scss'],
@@ -29,17 +33,17 @@ export class CheckoutPage {
 
   readonly form = this.fb.group({
     customer: this.fb.group({
-      firstName: [''],
-      lastName:[''],
-      email:['']
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName:['', [Validators.required, Validators.minLength(2)]],
+      email:['', [Validators.required, Validators.email]]
     }),
     address: this.fb.group({
-      street: [''],
-      city: [''],
-      zip:['']
+      street: ['', Validators.required],
+      city: ['', Validators.required],
+      zip:['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
     }),
-    shippingMethod: ['standard'],
-    privacy: [false]
+    shippingMethod: ['standard', Validators.required],
+    privacy: [false, Validators.requiredTrue],  
   });
 
   getControl(path: string) {

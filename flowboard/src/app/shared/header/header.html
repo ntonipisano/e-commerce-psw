@@ -4,6 +4,9 @@
   </button>
   <span>Tennis & Padel Store</span>
   <span class="example-spacer"></span>
+  <button mat-button (click)="toggleLogin()">
+  {{ auth.isLoggedIn ? 'Logout' : 'Login' }}
+  </button>
   <button matIconButton class="example-icon favorite-icon" aria-label="Example icon-button with heart icon" (click)="goToCheckout()">
     <mat-icon>shopping_cart</mat-icon>
   </button>
