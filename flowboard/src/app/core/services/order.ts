@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class OrderService {
   
   http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/api';
+  private readonly baseUrl = 'http://localhost:3000';
 
   create(order: Order): Observable<Order> {
     return this.http.post<Order>(`${this.baseUrl}/orders`,order);

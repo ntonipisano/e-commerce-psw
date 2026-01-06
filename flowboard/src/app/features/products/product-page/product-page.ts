@@ -28,7 +28,13 @@ b.createdAt.localeCompare(a.createdAt); //default dateDesc
 export class ProductPage {
   private service = inject(ProductService);
 
-  protected readonly products$ = this.service.list()
+  protected readonly products$ = this.service.list().pipe(
+  map(products => products.map(p => ({
+    ...p,
+    createdAt: (p as any).created_at // mappa snake_case -> camelCase
+  })))
+);
+
 
   private filters$ = new BehaviorSubject({
     title: '',

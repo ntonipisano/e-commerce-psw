@@ -9,7 +9,8 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { MatAnchor } from "@angular/material/button";
 import { CartService } from '../../../core/services/cart';
 import { OrderService } from '../../../core/services/order';
-import { map, take } from 'rxjs/operators';
+import { map, take, startWith } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import { Order } from '../../../core/models/order';
 
 @Component({
@@ -61,6 +62,19 @@ readonly items$ = this.cart.list();
 readonly total$ = this.items$.pipe(
   map(items => items.reduce(
     (sum, item)=> sum+item.price,0))
+);
+
+// Observable per la scelta della spedizione e relativi costi
+readonly shipping$ = this.form.get('shippingMethod')!.valueChanges.pipe(
+  startWith(this.form.get('shippingMethod')!.value)
+);
+
+readonly shippingCost$ = this.shipping$.pipe(
+  map((method: string | null) => method === 'express' ? 15 : 5)
+);
+
+readonly totalWithShipping$ = combineLatest([this.total$, this.shippingCost$]).pipe(
+  map(([total, ship]) => total + ship)
 );
 
 showSummary=false;

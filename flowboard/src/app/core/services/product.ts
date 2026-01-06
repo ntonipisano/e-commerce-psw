@@ -7,7 +7,7 @@ import { HttpClient } from "@angular/common/http";
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly baseUrl = 'http://localhost:3000/api';
+  private readonly baseUrl = 'http://localhost:3000';
 
   constructor(private readonly http: HttpClient) {}
     list(): Observable<Product[]> {

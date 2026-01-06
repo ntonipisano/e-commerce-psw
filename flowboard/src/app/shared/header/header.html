@@ -1,14 +1,28 @@
-<mat-toolbar>
-  <button matIconButton class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Tennis & Padel Store</span>
-  <span class="example-spacer"></span>
-  <button mat-button (click)="toggleLogin()">
-  {{ auth.isAuthenticated() ? 'Logout' : 'Login' }}
-  </button>
-  <button matIconButton class="example-icon favorite-icon" aria-label="Example icon-button with heart icon" (click)="goToCheckout()">
-    <mat-icon>shopping_cart</mat-icon>
-  </button>
+<mat-sidenav-container class="header-sidenav-container">
+  <mat-sidenav #drawer mode="over" position="start">
+    <mat-nav-list>
+      <button mat-button routerLink="/products" (click)="drawer.close()">Catalogo Prodotti</button>
+      <!-- Aggiungere qui wishlist, i miei ordini ecc... -->
+    </mat-nav-list>
+  </mat-sidenav>
 
-</mat-toolbar>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button mat-icon-button (click)="drawer.toggle()" aria-label="Open menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Tennis & Padel Store</span>
+      <span class="example-spacer"></span>
+      @if (auth.isAuthenticated()) {
+        <button mat-button (click)="toggleLogin()">Logout</button>
+      } @else {
+        <button mat-icon-button aria-label="Login" (click)="toggleLogin()">
+          <mat-icon>person</mat-icon>
+        </button>
+      }
+      <button mat-icon-button class="favorite-icon" aria-label="Carrello" (click)="goToCheckout()">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
