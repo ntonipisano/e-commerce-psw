@@ -15,12 +15,20 @@ export class Header {
 
   private router = inject(Router);
 
+  constructor(public auth: AuthService) {}
+
   goToCheckout(): void {
     this.router.navigate(['/checkout']);
   }
 
-  constructor(public auth: AuthService) {}
   toggleLogin(): void {
-  this.auth.isLoggedIn ? this.auth.logout() : this.auth.login();
+    if (this.auth.isAuthenticated()) {
+      this.auth.logout();
+      // reindirizza alla home dopo logout
+      this.router.navigate(['/products']);
+    } else {
+      // porta alla login page
+      this.router.navigate(['/login']);
+    }
   }
 }

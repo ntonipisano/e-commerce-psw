@@ -21,6 +21,21 @@ class AuthController < ApplicationController
     end
   end
 
+  # POST /auth/register
+  def register
+    user = User.new(email: params[:user][:email], password: params[:user][:password])
+
+    if user.save
+      render json: {
+        message: 'Utente registrato con successo',
+        id: user.id,
+        email: user.email
+      }, status: :created
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   # POST /auth/logout
   def logout
     head :no_content

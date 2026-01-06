@@ -5,7 +5,7 @@ import { AuthService } from '../services/auth-service';
 export const checkoutGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  return auth.isLoggedIn
+  return auth.isAuthenticated()
   ? true
   : router.createUrlTree(['/login']);
 };

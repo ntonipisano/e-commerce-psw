@@ -52,4 +52,7 @@ group :development, :test do
   gem 'devise-jwt'
 
   gem 'mysql2'
+
+  # Gemma per far comunicare il backend con il frontend Angular
+  gem 'rack-cors'
 end
