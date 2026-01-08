@@ -91,7 +91,7 @@
 				<ul>
 					@for (item of items$ | async; track item.id) {
 						<li>
-							{{ item.title }} — {{ item.price | currency:'EUR' }}
+							{{ item.product.title }} (x{{ item.quantity }}) — {{ item.unit_price * item.quantity | currency:'EUR' }}
 						</li>
 					}
 				</ul>

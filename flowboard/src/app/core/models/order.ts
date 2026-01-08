@@ -1,9 +1,9 @@
-import { Product } from "./product";
+import { CartItem } from "./cartitems";
 
 export interface Order {
     customer: unknown;
     address: unknown;
-    items: Product[];
+    items: CartItem[];
     total: number;
     createdAt: string;
 }

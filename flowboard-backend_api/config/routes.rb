@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   get '/products',     to: 'products#index'
   get '/products/:id', to: 'products#show'
 
+
+  get    '/cart',        to: 'cart#show'
+  post   '/cart/items',  to: 'cart_items#create'
+  patch  '/cart/items/:id', to: 'cart_items#update'
+  delete '/cart/items/:id', to: 'cart_items#destroy'
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

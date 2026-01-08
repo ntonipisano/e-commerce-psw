@@ -20,8 +20,8 @@ export class Header {
 
   constructor(public auth: AuthService) {}
 
-  goToCheckout(): void {
-    this.router.navigate(['/checkout']);
+  goToCart(): void {
+    this.router.navigate(['/cart']);
   }
 
   toggleLogin(): void {

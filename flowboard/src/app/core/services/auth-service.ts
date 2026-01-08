@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 interface AuthResponse {
-  token: string;
+  token?: string;
+  id: number;
+  email: string;
 }
 
 @Injectable({
@@ -17,11 +19,28 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, {
-      email,
-      password
-    }).pipe(
-      tap(res => this.setToken(res.token))
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, 
+      { email, password },
+      { observe: 'response' }
+    ).pipe(
+      tap((response: HttpResponse<AuthResponse>) => {
+        // Prova a leggere il token dal body della risposta
+        let token = response.body?.token;
+        
+        // Se non c'è nel body, leggi dall'header Authorization
+        if (!token) {
+          const authHeader = response.headers.get('Authorization');
+          if (authHeader) {
+            // Header è "Bearer <token>"
+            token = authHeader.replace('Bearer ', '');
+          }
+        }
+        
+        if (token) {
+          this.setToken(token);
+        }
+      }),
+      map(response => response.body as AuthResponse)
     );
   }
 

@@ -9,6 +9,7 @@ import { MatSelect, MatOption } from "@angular/material/select";
 import { MatAnchor } from "@angular/material/button";
 import { CartService } from '../../../core/services/cart';
 import { OrderService } from '../../../core/services/order';
+import { CartItem } from '../../../core/models/cartitems';
 import { map, take, startWith } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { Order } from '../../../core/models/order';
@@ -58,10 +59,12 @@ return !!control && control.hasError(errorCode) && control.touched;
 
 private cart = inject(CartService);
 private orderService = inject(OrderService);
-readonly items$ = this.cart.list();
+readonly items$ = this.cart.cart$.pipe(
+  map(cart => cart?.cart_items ?? [])
+);
 readonly total$ = this.items$.pipe(
-  map(items => items.reduce(
-    (sum, item)=> sum+item.price,0))
+  map((items: CartItem[]) => items.reduce(
+    (sum: number, item: CartItem) => sum + item.unit_price * item.quantity, 0))
 );
 
 // Observable per la scelta della spedizione e relativi costi
@@ -93,13 +96,13 @@ this.loading = true;
 this.orderSuccess = false;
 this.orderError = false;
 const value = this.form.getRawValue();
-this.items$.pipe(take(1)).subscribe(items => {
+this.items$.pipe(take(1)).subscribe((items: CartItem[]) => {
 const order: Order = {
 customer: value.customer!,
 address: value.address!,
 items,
 total: items.reduce(
-(sum, it) => sum + it.price, 0),
+(sum: number, it: CartItem) => sum + it.unit_price * it.quantity, 0),
 createdAt: new Date().toISOString()
 };
 this.orderService.create(order).subscribe({

@@ -6,6 +6,7 @@ import { NotFoundComponent } from './shared/not-found/not-found';
 import { checkoutGuard } from './core/guard/checkout-guard-guard';
 import { LoginComponent } from './features/login/login';
 import { RegisterComponent } from './features/register/register';
+import { CartComponent } from './features/cart/cart';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'logout', redirectTo: 'products' },
     { path: 'register', component: RegisterComponent },
+    { path: 'cart', canActivate: [checkoutGuard], component: CartComponent },
     //Questa route deve stare per ultima!!!
     { path: '**', component: NotFoundComponent },
 ];
