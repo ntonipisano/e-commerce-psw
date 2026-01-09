@@ -5,7 +5,8 @@
   @if (cart.cart_items.length === 0) {
     <mat-card appearance="outlined">
       <mat-card-content>
-        <p>Il carrello è vuoto</p>
+        <mat-card-subtitle>Il tuo carrello è vuoto!</mat-card-subtitle>
+        <button mat-raised-button routerLink="/products" color="primary" > Torna al catalogo </button>
       </mat-card-content>
     </mat-card>
   } @else {
@@ -58,10 +59,7 @@
 
     <mat-card appearance="outlined" class="cart-summary">
       <mat-card-content>
-        <h3>Totale carrello</h3>
-        <p class="total">
-          {{ total$ | async | currency:'EUR' }}
-        </p>
+        <h3>Totale provvisorio carrello: {{ total$ | async | currency:'EUR' }}</h3>
 
         <button mat-raised-button color="primary" routerLink="/checkout">
           Procedi al checkout

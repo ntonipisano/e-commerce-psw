@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Cart } from '../models/cart';
+import { inject } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -12,7 +13,7 @@ export class CartService {
   /** Stream pubblico del carrello */
   cart$ = this.cartSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   loadCart(): Observable<Cart> {
     return this.http.get<Cart>(`${this.apiUrl}/cart`).pipe(

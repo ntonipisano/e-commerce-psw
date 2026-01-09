@@ -7,6 +7,9 @@ import { checkoutGuard } from './core/guard/checkout-guard-guard';
 import { LoginComponent } from './features/login/login';
 import { RegisterComponent } from './features/register/register';
 import { CartComponent } from './features/cart/cart';
+import { OrderConfirmationPage } from './features/order/order-confirmation/order-confirmation';
+import { OrderPage } from './features/order/order-page/order-page';
+import { OrderDetailPage } from './features/order/order-detail/order-detail';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -17,6 +20,10 @@ export const routes: Routes = [
     { path: 'logout', redirectTo: 'products' },
     { path: 'register', component: RegisterComponent },
     { path: 'cart', canActivate: [checkoutGuard], component: CartComponent },
+    { path: 'order-confirmation', canActivate: [checkoutGuard], component: OrderConfirmationPage },
+    { path: 'orders', canActivate: [checkoutGuard], component: OrderPage },
+    { path: 'orders/:id', canActivate: [checkoutGuard], component: OrderDetailPage },
+    
     //Questa route deve stare per ultima!!!
     { path: '**', component: NotFoundComponent },
 ];

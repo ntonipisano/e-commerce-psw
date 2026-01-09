@@ -1,9 +1,16 @@
-import { CartItem } from "./cartitems";
+import { OrderItem } from "./orderitems";
 
 export interface Order {
-    customer: unknown;
-    address: unknown;
-    items: CartItem[];
+    id: number;
+    userId: number;
     total: number;
+    status: 'pending' | 'shipped' | 'delivered' | 'canceled';
+    name: unknown;
+    surname: unknown;
+    email: string;
+    address: unknown;
+    cap: string;
+    city: string;
+    items: OrderItem[];
     createdAt: string;
 }
