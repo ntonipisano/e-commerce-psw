@@ -28,14 +28,34 @@ export class RegisterComponent {
     passwordConfirm: ['', Validators.required]
   }, { validators: this.passwordsMatch });
 
-  // Custom validator per password confirmation
+  // Custom validator per conferma password
   private passwordsMatch(group: AbstractControl) {
-    const pass = group.get('password')?.value;
-    const confirm = group.get('passwordConfirm')?.value;
-    return pass === confirm ? null : { passwordsMismatch: true };
+  const pass = group.get('password');
+  const confirm = group.get('passwordConfirm');
+
+  if (!pass || !confirm) return null;
+
+  const mismatch = pass.value !== confirm.value;
+  if (mismatch) {
+    confirm.setErrors({ passwordsMismatch: true });
+  } else {
+    //  se le password coincidono rimuovo l’errore passwordsMismatch
+    const errors = confirm.errors;
+    if (errors) {
+      delete errors['passwordsMismatch'];
+      if (Object.keys(errors).length === 0) {
+        confirm.setErrors(null);
+      } else {
+        confirm.setErrors(errors);
+      }
+    }
   }
+  return null;
+}
+
 
   submit() {
+    this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
     const { email, password} = this.form.value;

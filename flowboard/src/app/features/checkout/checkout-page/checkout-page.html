@@ -82,24 +82,27 @@
 		</form>
 	</div>
 
-	<aside class="checkout-right">
-		<section class="cart-summary">
-			<h2>Riepilogo carrello</h2>
-			@if ((items$ | async)?.length === 0) {
-				<p>Il carrello è vuoto</p>
-				<p>Aggiungi prodotti prima di procedere.</p>
-			} @else {
-				<ul>
-					@for (item of items$ | async; track item.id) {
-						<li>
-							{{ item.product.title }} (x{{ item.quantity }}) — {{ item.unit_price * item.quantity | currency:'EUR' }}
-						</li>
-					}
-				</ul>
-				<p class="shipping">Spedizione: <strong>{{ shippingCost$ | async | currency:'EUR' }}</strong></p>
-				<p class="total">Totale: <strong>{{ total$ | async | currency:'EUR' }}</strong></p>
-				<p class="total">Totale (con spedizione): <strong>{{ totalWithShipping$ | async | currency:'EUR' }}</strong></p>
-			}
-		</section>
-	</aside>
+<aside class="checkout-right">
+  <section class="cart-summary">
+    <h2>Riepilogo carrello</h2>
+
+    @if ((items$ | async)?.length) {
+      <ul class="no-bullets">
+        @for (item of items$ | async; track item.id) {
+          <li>
+            {{ item.product.title }} (x{{ item.quantity }}) — {{ item.unit_price * item.quantity | currency:'EUR' }}
+          </li>
+        }
+      </ul>
+
+      <p class="shipping">Spedizione: <strong>{{ shippingCost$ | async | currency:'EUR' }}</strong></p>
+      <p class="total">Totale: <strong>{{ total$ | async | currency:'EUR' }}</strong></p>
+      <p class="total">Totale (con spedizione): <strong>{{ totalWithShipping$ | async | currency:'EUR' }}</strong></p>
+    } @else {
+      <p>Il carrello è vuoto</p>
+      <p>Aggiungi prodotti prima di procedere.</p>
+    }
+  </section>
+</aside>
+
 </div>

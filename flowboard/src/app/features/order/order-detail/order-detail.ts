@@ -26,7 +26,8 @@ export class OrderDetailPage {
     switchMap(id => this.service.getOrder(id)),
      map(order => ({
     ...order,
-    createdAt: (order as any).created_at
+    createdAt: (order as any).created_at,
+    items: (order as any).order_items,
   }))
   );
 

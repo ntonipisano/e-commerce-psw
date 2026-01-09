@@ -1,7 +1,7 @@
+<h1>Inserisci qui i tuoi dati per la registrazione</h1>
 <div class="register-container">
   <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title>Registrazione</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -49,7 +49,7 @@
         </div>
         }
 
-        <button mat-raised-button color="primary" type="submit" class="full-width">
+        <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="form.invalid">
           Registrati
         </button>
 

@@ -8,10 +8,20 @@ import { inject } from '@angular/core';
 export class CartService {
 
   private readonly apiUrl = 'http://localhost:3000'; // backend Rails
+  /* 
   private cartSubject = new BehaviorSubject<Cart | null>(null);
 
-  /** Stream pubblico del carrello */
   cart$ = this.cartSubject.asObservable();
+  */
+
+  private readonly emptyCart: Cart = {
+  id: 0,
+  cart_items: []
+  };
+
+  private cartSubject = new BehaviorSubject<Cart>(this.emptyCart);
+  cart$ = this.cartSubject.asObservable();
+
 
   private http = inject(HttpClient);
 
@@ -57,6 +67,6 @@ export class CartService {
   }
 
   clearLocal(): void {
-    this.cartSubject.next(null);
+    this.cartSubject.next(this.emptyCart);
   }
 }

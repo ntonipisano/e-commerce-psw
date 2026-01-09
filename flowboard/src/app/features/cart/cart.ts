@@ -9,6 +9,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButton } from '@angular/material/button';
 import { map } from 'rxjs/operators';
 import { RouterModule } from '@angular/router';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cart-page',
@@ -16,7 +17,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, MatCardModule, MatListModule, MatFormFieldModule, MatInputModule, MatIconModule, RouterModule, MatButton],
   templateUrl: './cart.html'
 })
-export class CartComponent {
+export class CartComponent implements OnInit {
 
   private cartService = inject(CartService);
 
@@ -33,5 +34,9 @@ export class CartComponent {
 
   removeItem(itemId: number) {
     this.cartService.removeItem(itemId).subscribe();
+  }
+
+  ngOnInit() {
+    this.cartService.loadCart().subscribe();
   }
 }
