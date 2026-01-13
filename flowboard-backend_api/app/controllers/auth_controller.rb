@@ -32,7 +32,7 @@ class AuthController < ApplicationController
         email: user.email
       }, status: :created
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: 'Errore durante la registrazione. Email già registrata', details: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

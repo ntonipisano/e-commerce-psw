@@ -58,11 +58,13 @@ export class RegisterComponent {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
 
+    this.error = false;
+
     const { email, password} = this.form.value;
 
     this.auth.register(email!, password!).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: () => this.error = true
+      next: () => { this.router.navigate(['/login']); },
+      error: (err) => { if (err.status === 422) { this.form.get('email')?.setErrors({ emailTaken: true }); } else { this.error = true; } }
     });
   }
 

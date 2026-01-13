@@ -16,6 +16,9 @@
           @if (hasError('email','email')) {
           <mat-error>Formato email non valido</mat-error>
           }
+          @if (hasError('email','emailTaken')) {
+          <mat-error>Errore: email già in uso.</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">

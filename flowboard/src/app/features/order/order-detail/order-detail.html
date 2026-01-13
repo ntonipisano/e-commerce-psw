@@ -18,7 +18,7 @@
                       @else if (order.status === 'delivered') { Consegnato } 
                       @else if (order.status === 'canceled') { Annullato } 
         </p>
-        <h2>Prodotti</h2>
+        <h2>Prodotti ordinati</h2>
         <ul class="no-bullets">
           @for (item of order.items; track item.product.id) {
             <li><img mat-card-image [src]="item.product.thumbnail" class="small-thumbnail" routerLink="/products/{{ item.product.id }}">
