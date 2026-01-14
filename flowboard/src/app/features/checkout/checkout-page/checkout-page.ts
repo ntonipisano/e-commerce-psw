@@ -14,6 +14,9 @@ import { OrderService } from '../../../core/services/order';
 import { CartItem } from '../../../core/models/cartitems';
 import { OrderItem } from '../../../core/models/orderitems';
 import { CreateOrder } from '../../../core/models/create-order';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-checkout-page',
@@ -27,7 +30,9 @@ import { CreateOrder } from '../../../core/models/create-order';
     MatOption,
     MatAnchor,
     CurrencyPipe,
-    AsyncPipe
+    AsyncPipe,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './checkout-page.html',
   styleUrls: ['./checkout-page.scss'],
@@ -38,6 +43,7 @@ export class CheckoutPage {
   private cart = inject(CartService);
   private orderService = inject(OrderService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   readonly form = this.fb.group({
     customer: this.fb.group({
@@ -128,23 +134,30 @@ export class CheckoutPage {
         address: value.address.street!,
         city: value.address.city!,
         cap: value.address.zip!,
-        //items: orderItems,
-        /* total: orderItems.reduce(
-          (sum, it) => sum + it.unit_price * it.quantity,
-          0
-        )*/
       };
 
       this.orderService.createOrder(order).subscribe({
         next: () => {
           this.loading = false;
           this.orderSuccess = true;
+
+          this.snackBar.open(
+          'Ordine effettuato con successo 🎉',
+          'OK',
+          { duration: 3000 }
+          );
+
           this.form.reset();
           this.router.navigate(['/order-confirmation']);
         },
         error: () => {
           this.loading = false;
           this.orderError = true;
+          const ref = this.snackBar.open(
+          'Errore durante il checkout',
+          'Riprova',
+          { duration: 5000 }
+          );
         }
       });
     });

@@ -76,7 +76,17 @@
 
 			<div class="form-actions">
 				<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || !(items$ | async)?.length">
+
+					 @if (loading) {
+					<mat-progress-spinner
+						diameter="18"
+						mode="indeterminate">
+					</mat-progress-spinner>
+					<span class="loading-text">Invio ordine...</span>
+					} @else {
 					Conferma ordine
+					}
+
 				</button>
 			</div>
 		</form>

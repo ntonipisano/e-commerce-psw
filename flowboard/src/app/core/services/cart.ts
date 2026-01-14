@@ -8,11 +8,6 @@ import { inject } from '@angular/core';
 export class CartService {
 
   private readonly apiUrl = 'http://localhost:3000'; // backend Rails
-  /* 
-  private cartSubject = new BehaviorSubject<Cart | null>(null);
-
-  cart$ = this.cartSubject.asObservable();
-  */
 
   private readonly emptyCart: Cart = {
   id: 0,

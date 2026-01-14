@@ -55,4 +55,10 @@ group :development, :test do
 
   # Gemma per far comunicare il backend con il frontend Angular
   gem 'rack-cors'
+
+  # Test e documentazione API
+  gem 'rspec-rails'
+  gem 'faker'
+  gem 'rswag'
+
 end

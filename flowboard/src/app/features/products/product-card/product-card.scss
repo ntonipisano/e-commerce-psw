@@ -48,3 +48,13 @@ img { max-height: 150px;
     color: var(--mat-primary-500);
   }
 }
+
+.actions-row {
+  display: flex;
+  align-items: center;
+}
+
+.wishlist-btn {
+  margin-left: auto;
+}
+
