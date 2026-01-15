@@ -33,7 +33,26 @@ export class WishlistPage {
   wishlist$ = this.wishlistService.wishlist$;
 
   remove(productId: number) {
-    this.wishlistService.remove(productId).subscribe();
+    this.wishlistService.remove(productId).subscribe({
+      next: () => {
+        this.snackBar.open(
+          'Prodotto rimosso dalla wishlist',
+          'OK',
+          {
+            duration: 2500,
+            horizontalPosition: 'right',
+            verticalPosition: 'bottom',
+          }
+        );
+      },
+      error: () => {
+        this.snackBar.open(
+          'Errore durante la rimozione dalla wishlist',
+          'Chiudi',
+          { duration: 3000 }
+        );
+      }
+    });
   }
 
    onAddToCart(product: Product) {

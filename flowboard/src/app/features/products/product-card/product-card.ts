@@ -31,7 +31,7 @@ export class ProductCard {
     inWishlist$!: Observable<boolean>;
 
     ngOnInit() {
-      // Trasforma la wishlist in un booleano reactive
+      // Reactive wishlist 
       this.inWishlist$ = this.WishlistService.wishlist$.pipe(
         map(items => items.some(item => item.product.id === this.product.id))
       );
@@ -63,9 +63,47 @@ export class ProductCard {
   async toggleWishlist() {
      const isIn = await firstValueFrom(this.inWishlist$);
     if (isIn) {
-      this.WishlistService.remove(this.product.id).subscribe();
+      this.WishlistService.remove(this.product.id).subscribe({
+        next: () => {
+          this.snackBar.open(
+            `"${this.product.title}" rimosso dalla wishlist`,
+            'OK',
+            {
+              duration: 2500,
+              horizontalPosition: 'right',
+              verticalPosition: 'bottom',
+            }
+          );
+        },
+        error: () => {
+          this.snackBar.open(
+            'Errore durante la rimozione dalla wishlist',
+            'Chiudi',
+            { duration: 3000 }
+          );
+        }
+      });
     } else {
-      this.WishlistService.add(this.product.id).subscribe();
+      this.WishlistService.add(this.product.id).subscribe({
+        next: () => {
+          this.snackBar.open(
+            `"${this.product.title}" aggiunto alla wishlist`,
+            'OK',
+            {
+              duration: 2500,
+              horizontalPosition: 'right',
+              verticalPosition: 'bottom',
+            }
+          );
+        },
+        error: () => {
+          this.snackBar.open(
+            'Errore durante l’aggiunta alla wishlist',
+            'Chiudi',
+            { duration: 3000 }
+          );
+        }
+      });
     }
   }
 
