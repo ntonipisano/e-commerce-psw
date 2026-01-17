@@ -52,8 +52,18 @@
         </div>
         }
 
-        <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="form.invalid">
-          Registrati
+        <button mat-raised-button color="primary" type="submit" class="full-width" [disabled]="form.invalid || loading"> 
+          @if (loading) {
+            <div class="spinner-container">
+               <mat-progress-spinner
+                  diameter="24"
+                  mode="indeterminate">
+               </mat-progress-spinner>
+               <span>Caricamento...</span>
+            </div>
+          } @else {
+             Registrati
+          }
         </button>
 
       </form>
