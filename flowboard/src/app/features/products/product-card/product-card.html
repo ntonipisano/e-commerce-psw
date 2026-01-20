@@ -11,7 +11,7 @@
     </p>
   </mat-card-content>
   <mat-card-actions class="actions-row">
-    <button mat-button (click)="onAddToCart(product)">Aggiungi al carrello</button>
+    <button mat-button (click)="add.emit(product)">Aggiungi al carrello</button>
      <button mat-icon-button color="warn" class="wishlist-btn" (click)="toggleWishlist()">
       <mat-icon>
         {{ (inWishlist$ | async) ? 'favorite' : 'favorite_border' }}

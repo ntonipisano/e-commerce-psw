@@ -10,6 +10,9 @@ import { ProductService } from '../../../core/services/product';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CartService } from '../../../core/services/cart';
 
 type Sort = 'priceAsc' | 'priceDesc' | 'dateAsc' | 'dateDesc';
 const cmp = (s:Sort)=>(a:Product,b:Product)=>
@@ -21,12 +24,14 @@ b.createdAt.localeCompare(a.createdAt); //default dateDesc
 
 @Component({
   selector: 'app-product-page',
-  imports: [ProductCard, FormsModule, MatFormFieldModule, MatInput, MatLabel, AsyncPipe, MatSelectModule, MatOptionModule, MatPaginator],
+  imports: [ProductCard, FormsModule, MatFormFieldModule, MatInput, MatLabel, AsyncPipe, MatSelectModule, MatOptionModule, MatPaginator, MatSnackBarModule],
   templateUrl: './product-page.html',
   styleUrls: ['./product-page.scss'],
 })
 export class ProductPage {
   private service = inject(ProductService);
+  private CartService = inject(CartService);
+  private snackBar = inject(MatSnackBar);
 
   protected readonly products$ = this.service.list().pipe(
   map(products => products.map(p => ({
@@ -96,8 +101,27 @@ export class ProductPage {
     });
   }
 
-  onAddToCart(product: Product) {
-    console.log('Aggiunto al carrello:', product);
+   onAddToCart(product: Product) {
+    this.CartService.addItem(product.id, 1).subscribe({
+      next: () => {
+        this.snackBar.open(
+          `"${product.title}" aggiunto al carrello`,
+          'OK',
+          {
+            duration: 2500,
+            horizontalPosition: 'right',
+            verticalPosition: 'bottom',
+          }
+        );
+      },
+      error: () => {
+        this.snackBar.open(
+          'Errore durante l’aggiunta al carrello',
+          'Chiudi',
+          { duration: 3000 }
+        );
+      }
+    });
   }
 
   updateMinPrice(value: string) {

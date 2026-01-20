@@ -13,7 +13,6 @@ export const appConfig: ApplicationConfig = {
     // HttpClient globale con supporto agli interceptor
     provideHttpClient(withInterceptorsFromDi()),
 
-    // Interceptor registrato nel root injector
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

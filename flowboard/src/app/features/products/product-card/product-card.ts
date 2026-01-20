@@ -37,29 +37,6 @@ export class ProductCard {
       );
     }
 
-  onAddToCart(product: Product) {
-    this.CartService.addItem(product.id, 1).subscribe({
-      next: () => {
-        this.snackBar.open(
-          `"${product.title}" aggiunto al carrello`,
-          'OK',
-          {
-            duration: 2500,
-            horizontalPosition: 'right',
-            verticalPosition: 'bottom',
-          }
-        );
-      },
-      error: () => {
-        this.snackBar.open(
-          'Errore durante l’aggiunta al carrello',
-          'Chiudi',
-          { duration: 3000 }
-        );
-      }
-    });
-  }
-
   async toggleWishlist() {
      const isIn = await firstValueFrom(this.inWishlist$);
     if (isIn) {
