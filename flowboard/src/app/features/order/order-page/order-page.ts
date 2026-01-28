@@ -7,10 +7,13 @@ import { MatInput } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-
 import { OrderService } from '../../../core/services/order';
 import { Order } from '../../../core/models/order';
 import { OrderCard } from '../order-card/order-card';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 type Sort = 'dateAsc' | 'dateDesc';
 
@@ -38,6 +41,7 @@ const cmp = (s: Sort) => (a: Order, b: Order) =>
 })
 export class OrderPage {
   private service = inject(OrderService);
+  private snackBar = inject(MatSnackBar);
 
   protected readonly orders$ = this.service.getOrders().pipe(
     map(orders =>
@@ -45,7 +49,16 @@ export class OrderPage {
         ...o,
         createdAt: (o as any).created_at
       }))
-    )
+    ),
+    catchError(err => {
+      let message = 'Errore nel caricamento degli ordini';
+      if (err.status === 401) { message = 'Non sei autenticato';
+    } else if (err.status === 404) { message = 'Ordini non trovati'; }
+    else if (err.status === 422 && err.error?.errors) { message = err.error.errors.join(', '); }
+
+    this.snackBar.open(message, 'Chiudi', {duration: 5000});
+    return of([]);
+  })
   );
 
   /** FILTRI */

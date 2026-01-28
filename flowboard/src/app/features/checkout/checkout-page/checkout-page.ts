@@ -150,15 +150,21 @@ export class CheckoutPage {
           this.form.reset();
           this.router.navigate(['/order-confirmation']);
         },
-        error: () => {
-          this.loading = false;
-          this.orderError = true;
-          const ref = this.snackBar.open(
-          'Errore durante il checkout',
-          'Riprova',
-          { duration: 5000 }
-          );
-        }
+       error: err => {
+    this.loading = false;
+    this.orderError = true;
+
+    let message = 'Errore durante il checkout'; // fallback generico
+    if (err.error) {
+      if (err.error.error) {
+        message = err.error.error;
+      } else if (err.error.errors) {
+        message = err.error.errors.join(', ');
+      }
+    }
+
+    this.snackBar.open(message, 'Riprova', { duration: 5000 });
+  }
       });
     });
   }
