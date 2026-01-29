@@ -28,6 +28,7 @@ class ApplicationController < ActionController::API
     parts.last if parts.size == 2 && parts.first == 'Bearer'
   end
 
+  # Gestione globale status code 401 (Unauthorized)
   def authenticate_user!
     unless current_user
       render json: { error: 'Unauthorized' }, status: :unauthorized

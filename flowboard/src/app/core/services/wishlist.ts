@@ -40,6 +40,7 @@ export class WishlistService {
     );
   }
 
+  /* Rimuove un prodotto dalla wishlist */
   remove(productId: number): Observable<WishlistItem[]> {
   return this.http
     .delete<WishlistItem[]>(`${this.apiUrl}/wishlist/${productId}`)

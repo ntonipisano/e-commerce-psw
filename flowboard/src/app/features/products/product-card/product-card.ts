@@ -50,14 +50,17 @@ export class ProductCard {
             }
           );
         },
-        error: () => {
-          this.snackBar.open(
-            'Errore durante la rimozione dalla wishlist',
-            'Chiudi',
-            { duration: 3000 }
-          );
+        error: err => {
+        let message = 'Errore durante la rimozione';
+
+        if (err.status === 401) {
+          message = 'Devi essere autenticato';
+        } else if (err.status === 422) {
+          message = err.error?.error || 'Prodotto non presente in wishlist';
         }
-      });
+        this.snackBar.open(message, 'Chiudi', { duration: 3000 });
+      }
+    });
     } else {
       this.WishlistService.add(this.product.id).subscribe({
         next: () => {

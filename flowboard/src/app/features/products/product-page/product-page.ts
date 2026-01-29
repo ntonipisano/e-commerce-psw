@@ -160,7 +160,6 @@ onAddToCart(product: Product) {
     ...this.filters$.value,
     minPrice: min
   });
-  console.log('Min Price:', min);
 }
 
 updateMaxPrice(value: string) {
@@ -169,7 +168,6 @@ updateMaxPrice(value: string) {
     ...this.filters$.value,
     maxPrice: max
   });
-  console.log('Max Price:', max);
 }
 
 }

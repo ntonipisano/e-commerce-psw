@@ -21,6 +21,7 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
+  // Autentica l'utente con email e password, salva il token se il login ha successo
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, 
       { email, password },
@@ -50,6 +51,7 @@ export class AuthService {
     );
   }
 
+  // Registra un nuovo utente con email e password
   register(email: string, password: string) {
     return this.http.post(`${this.apiUrl}/register`, {
       user: {
@@ -63,18 +65,22 @@ export class AuthService {
     );
   }
 
+  // Effettua il logout rimuovendo il token da localStorage
   logout() {
     localStorage.removeItem(this.tokenKey);
   }
 
+  // Verifica se l'utente è autenticato controllando la presenza del token
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
 
+  // Restituisce il token di autenticazione da localStorage
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
+  // Salva il token in localStorage
   private setToken(token: string) {
     localStorage.setItem(this.tokenKey, token);
   }

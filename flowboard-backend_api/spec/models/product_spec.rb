@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# Model tests per Product
 RSpec.describe Product, type: :model do
   it "is valid with valid attributes" do
     product = Product.new(

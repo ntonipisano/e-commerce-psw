@@ -1,6 +1,8 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
 
+  # POST /orders
+  # Crea un nuovo ordine dal carrello e svuota il carrello dopo il successo
   def create
     cart = current_user.cart
     return render json: { error: "Carrello vuoto" }, status: :unprocessable_entity if cart.cart_items.empty? #Errore 422
@@ -24,11 +26,15 @@ class OrdersController < ApplicationController
     render json: order, include: { order_items: { include: :product } }, status: :created
   end
 
+  # GET /orders/:id
+  # Recupera i dettagli di un ordine specifico
   def show
     order = current_user.orders.find(params[:id])
     render json: order, include: { order_items: { include: :product } }
   end
 
+  # GET /orders
+  # Recupera la lista di tutti gli ordini dell'utente autenticato
   def index
     orders = current_user.orders.includes(order_items: :product)
     render json: orders, include: { order_items: { include: :product } }

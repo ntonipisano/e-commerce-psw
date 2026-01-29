@@ -14,6 +14,7 @@ export class OrderService {
   private http = inject(HttpClient);
   private cartService = inject(CartService);
   
+  // Crea un nuovo ordine e svuota il carrello locale
   createOrder(order: CreateOrder): Observable<Order> {
     return this.http.post<Order>(`${this.apiUrl}/orders`, order).pipe(
       tap(() => this.cartService.clearLocal()), // svuota il carrello locale
@@ -23,6 +24,7 @@ export class OrderService {
     );
   }
 
+  // Recupera tutti gli ordini dell'utente
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.apiUrl}/orders`).pipe(
       catchError(err => {
@@ -31,6 +33,7 @@ export class OrderService {
     );
   }
 
+  // Recupera un ordine specifico
   getOrder(id: string): Observable<Order> {
     return this.http.get<Order>(`${this.apiUrl}/orders/${id}`).pipe(
       catchError(err => {

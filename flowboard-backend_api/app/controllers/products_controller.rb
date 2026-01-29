@@ -1,12 +1,14 @@
 class ProductsController < ApplicationController
 
-  # Tutti i prodotti
+  # GET /products
+  # Recupera la lista di tutti i prodotti
   def index
     products = Product.all
     render json: products
   end
 
-  # Prodotto specifico
+  # GET /products/:id
+  # Recupera i dettagli di un prodotto specifico per ID
   def show
     product = Product.find(params[:id])
     render json: product

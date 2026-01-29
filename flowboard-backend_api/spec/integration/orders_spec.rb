@@ -1,5 +1,6 @@
 require 'swagger_helper'
 
+# Integration tests per l'endpoint creazione ordini
 RSpec.describe 'Orders API', type: :request do
   path '/orders' do
     post 'Creates an order' do

@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# Model tests per Order
 RSpec.describe Order, type: :model do
   let(:user) { User.create!(email: "test@example.com", password: "password") }
 

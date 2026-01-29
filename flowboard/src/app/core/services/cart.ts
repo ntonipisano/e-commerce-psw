@@ -19,6 +19,7 @@ export class CartService {
   private cartSubject = new BehaviorSubject<Cart>(this.emptyCart);
   cart$ = this.cartSubject.asObservable();
 
+  // Carica il carrello dal server
   loadCart(): Observable<Cart> {
     return this.http.get<Cart>(`${this.apiUrl}/cart`).pipe(
       tap(cart => this.cartSubject.next(cart)),
@@ -27,6 +28,7 @@ export class CartService {
   }
 
 
+  // Aggiunge un articolo al carrello
   addItem(productId: number, quantity = 1): Observable<Cart> {
     return this.http.post<Cart>(`${this.apiUrl}/cart/items`, {
       product_id: productId,
@@ -37,6 +39,7 @@ export class CartService {
     );
   }
 
+  // Aggiorna la quantità di un articolo nel carrello
   updateItem(itemId: number, quantity: number): Observable<Cart> {
     return this.http.patch<Cart>(`${this.apiUrl}/cart/items/${itemId}`, {
       quantity
@@ -46,6 +49,7 @@ export class CartService {
     );
   }
 
+  // Rimuove un articolo dal carrello
   removeItem(itemId: number): Observable<Cart> {
     return this.http.delete<Cart>(`${this.apiUrl}/cart/items/${itemId}`)
       .pipe(
@@ -54,6 +58,7 @@ export class CartService {
       );
   }
 
+  // Calcola il totale del carrello moltiplicando prezzo per quantità di ogni articolo
   getTotal(): number {
     const cart = this.cartSubject.value;
     if (!cart) return 0;
@@ -64,6 +69,7 @@ export class CartService {
     );
   }
 
+  // Svuota il carrello locale
   clearLocal(): void {
     this.cartSubject.next(this.emptyCart);
   }
