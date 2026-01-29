@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Cart } from '../models/cart';
 import { inject } from '@angular/core';
+import { catchError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
 
-  private readonly apiUrl = 'http://localhost:3000'; // backend Rails
-
+  private readonly apiUrl = 'http://localhost:3000';
+  private http = inject(HttpClient);
   private readonly emptyCart: Cart = {
   id: 0,
   cart_items: []
@@ -17,12 +19,10 @@ export class CartService {
   private cartSubject = new BehaviorSubject<Cart>(this.emptyCart);
   cart$ = this.cartSubject.asObservable();
 
-
-  private http = inject(HttpClient);
-
   loadCart(): Observable<Cart> {
     return this.http.get<Cart>(`${this.apiUrl}/cart`).pipe(
-      tap(cart => this.cartSubject.next(cart))
+      tap(cart => this.cartSubject.next(cart)),
+      catchError(err => throwError (() => err))
     );
   }
 
@@ -32,7 +32,8 @@ export class CartService {
       product_id: productId,
       quantity
     }).pipe(
-      tap(cart => this.cartSubject.next(cart))
+      tap(cart => this.cartSubject.next(cart)),
+      catchError(err => throwError (() => err))
     );
   }
 
@@ -40,14 +41,16 @@ export class CartService {
     return this.http.patch<Cart>(`${this.apiUrl}/cart/items/${itemId}`, {
       quantity
     }).pipe(
-      tap(cart => this.cartSubject.next(cart))
+      tap(cart => this.cartSubject.next(cart)),
+      catchError(err => throwError (() => err))
     );
   }
 
   removeItem(itemId: number): Observable<Cart> {
     return this.http.delete<Cart>(`${this.apiUrl}/cart/items/${itemId}`)
       .pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(err => throwError (() => err))
       );
   }
 

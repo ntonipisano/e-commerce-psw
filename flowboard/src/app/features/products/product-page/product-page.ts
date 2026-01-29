@@ -13,6 +13,7 @@ import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CartService } from '../../../core/services/cart';
+import { catchError, of } from 'rxjs';
 
 type Sort = 'priceAsc' | 'priceDesc' | 'dateAsc' | 'dateDesc';
 const cmp = (s:Sort)=>(a:Product,b:Product)=>
@@ -34,11 +35,31 @@ export class ProductPage {
   private snackBar = inject(MatSnackBar);
 
   protected readonly products$ = this.service.list().pipe(
-  map(products => products.map(p => ({
-    ...p,
-    createdAt: (p as any).created_at // mappa snake_case -> camelCase
-  })))
+  map(products =>
+    products.map(p => ({
+      ...p,
+      createdAt: (p as any).created_at
+    }))
+  ),
+  catchError(err => {
+    // Errore generico
+    let message = 'Errore nel caricamento dei prodotti';
+
+    if (err.status === 404) {
+      message = 'Nessun prodotto trovato';
+    } else if (err.status === 500) {
+      message = 'Servizio temporaneamente non disponibile';
+    }
+
+    this.snackBar.open(message, 'Chiudi', {
+      duration: 4000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+    return of([]);
+  })
 );
+
 
 
   private filters$ = new BehaviorSubject({
@@ -101,28 +122,37 @@ export class ProductPage {
     });
   }
 
-   onAddToCart(product: Product) {
-    this.CartService.addItem(product.id, 1).subscribe({
-      next: () => {
-        this.snackBar.open(
-          `"${product.title}" aggiunto al carrello`,
-          'OK',
-          {
-            duration: 2500,
-            horizontalPosition: 'right',
-            verticalPosition: 'bottom',
-          }
-        );
-      },
-      error: () => {
-        this.snackBar.open(
-          'Errore durante l’aggiunta al carrello',
-          'Chiudi',
-          { duration: 3000 }
-        );
+onAddToCart(product: Product) {
+  this.CartService.addItem(product.id, 1).subscribe({
+    next: () => {
+      this.snackBar.open(
+        `"${product.title}" aggiunto al carrello`,
+        'OK',
+        {
+          duration: 2500,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom',
+        }
+      );
+    },
+    error: (err) => {
+      let msg = 'Errore durante l’aggiunta al carrello';
+
+      if (err.status === 401) {
+        msg = 'Devi effettuare il login per aggiungere al carrello';
+      } else if (err.status === 404) {
+        msg = 'Prodotto non trovato';
+      } else if (err.status === 422) {
+        msg = err.error?.error || 'Quantità non valida';
+      } else if (err.status === 500) {
+        msg = 'Errore interno del server, riprova più tardi';
       }
-    });
-  }
+
+      this.snackBar.open(msg, 'Chiudi', { duration: 3000 });
+    }
+  });
+}
+
 
   updateMinPrice(value: string) {
   const min = value ? parseFloat(value) : null;

@@ -4,7 +4,6 @@ import { Product } from '../../../core/models/product';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { RouterModule } from '@angular/router';
-import { CartService } from '../../../core/services/cart';
 import { WishlistService } from '../../../core/services/wishlist';
 import { MatIconModule } from "@angular/material/icon";
 import { Observable, firstValueFrom, map } from 'rxjs';
@@ -23,7 +22,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 export class ProductCard {
     @Input({ required: true }) product!: Product;
     @Output () add = new EventEmitter<Product>();
-    private CartService = inject(CartService);
     private WishlistService = inject(WishlistService);
     private snackBar = inject(MatSnackBar);
 
@@ -73,13 +71,17 @@ export class ProductCard {
             }
           );
         },
-        error: () => {
-          this.snackBar.open(
-            'Errore durante l’aggiunta alla wishlist',
-            'Chiudi',
-            { duration: 3000 }
-          );
+        error: err => {
+        let message = 'Errore durante l’aggiunta';
+
+        if (err.status === 422) {
+          message = err.error?.error || 'Prodotto già in wishlist';
+        } else if (err.status === 401) {
+          message = 'Devi essere autenticato';
         }
+
+        this.snackBar.open(message, 'Chiudi', { duration: 3000 });
+      }
       });
     }
   }

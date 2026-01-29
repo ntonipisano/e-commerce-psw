@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { WishlistItem } from '../models/wishlist-item';
 import { map } from 'rxjs/operators';
+import { catchError, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService {
@@ -17,7 +18,10 @@ export class WishlistService {
   /* Carica la wishlist dell’utente autenticato */
   loadWishlist(): Observable<WishlistItem[]> {
     return this.http.get<WishlistItem[]>(`${this.apiUrl}/wishlist`).pipe(
-      tap(items => this.wishlistSubject.next(items))
+      tap(items => this.wishlistSubject.next(items)),
+      catchError(err => {
+        return throwError (() => err);
+  })
     );
   }
 
@@ -29,7 +33,10 @@ export class WishlistService {
       tap(item => {
         const current = this.wishlistSubject.value;
         this.wishlistSubject.next([...current, item]);
-      })
+      }),
+      catchError(err => {
+        return throwError (() => err);
+  })
     );
   }
 
@@ -39,15 +46,14 @@ export class WishlistService {
     .pipe(
       tap(items => {
         this.wishlistSubject.next(items);
-      })
+      }),
+      catchError(err => {
+        return throwError (() => err);
+  })
     );
 }
 
-
-
-  /*
-  Verifica se un prodotto è in wishlist
-   */
+  /*Verifica se un prodotto è in wishlist*/
   isInWishlist(productId: number): boolean {
     return this.wishlistSubject.value
       .some(item => item.product.id === productId);

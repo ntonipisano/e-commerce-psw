@@ -3,6 +3,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 interface AuthResponse {
   token?: string;
@@ -41,7 +43,10 @@ export class AuthService {
           this.setToken(token);
         }
       }),
-      map(response => response.body as AuthResponse)
+      map(response => response.body as AuthResponse),
+      catchError(err => {
+        return throwError(() => err);
+  })
     );
   }
 
@@ -51,7 +56,11 @@ export class AuthService {
         email,
         password,
       }
-    });
+    }).pipe (
+      catchError(err => {
+        return throwError(() => err);
+  })
+    );
   }
 
   logout() {

@@ -32,27 +32,37 @@ map(params => params.get('id') as string),
 switchMap(id => this.svc.getProductById(id)),
 );
 
-  onAddToCart(product: Product) {
-    this.CartService.addItem(product.id, 1).subscribe({
-      next: () => {
-        this.snackBar.open(
-          `"${product.title}" aggiunto al carrello`,
-          'OK',
-          {
-            duration: 2500,
-            horizontalPosition: 'right',
-            verticalPosition: 'bottom',
-          }
-        );
-      },
-      error: () => {
-        this.snackBar.open(
-          'Errore durante l’aggiunta al carrello',
-          'Chiudi',
-          { duration: 3000 }
-        );
+onAddToCart(product: Product) {
+  this.CartService.addItem(product.id, 1).subscribe({
+    next: () => {
+      this.snackBar.open(
+        `"${product.title}" aggiunto al carrello`,
+        'OK',
+        {
+          duration: 2500,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom',
+        }
+      );
+    },
+    error: (err) => {
+      let msg = 'Errore durante l’aggiunta al carrello';
+
+      if (err.status === 401) {
+        msg = 'Devi effettuare il login per aggiungere al carrello';
+      } else if (err.status === 404) {
+        msg = 'Prodotto non trovato';
+      } else if (err.status === 422) {
+        msg = err.error?.error || 'Quantità non valida';
+      } else if (err.status === 500) {
+        msg = 'Errore interno del server, riprova più tardi';
       }
-    });
-  }
+
+      this.snackBar.open(msg, 'Chiudi', { duration: 3000 });
+    }
+  });
+}
+
+
 
 }

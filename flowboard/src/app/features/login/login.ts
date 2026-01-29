@@ -6,6 +6,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
   error = false;
 
@@ -26,16 +29,28 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
 
-  submit() {
-    if (this.form.invalid) return;
+submit() {
+  if (this.form.invalid) return;
 
-    const { email, password } = this.form.value;
+  const { email, password } = this.form.value;
 
-    this.auth.login(email!, password!).subscribe({
-      next: () => this.router.navigate(['/products']),
-      error: () => this.error = true
-    });
-  }
+  this.auth.login(email!, password!).subscribe({
+    next: () => this.router.navigate(['/products']),
+    error: err => {
+      let message = 'Errore durante il login';
+
+      if (err.status === 401) {
+        message = err.error?.error || 'Email o password non valide';
+      } else if (err.status === 422) {
+        message = err.error?.error || 'Dati non validi';
+      } else if (err.status === 500) {
+        message = 'Errore del server';
+      }
+      this.error = true;
+      this.snackBar.open(message, 'Chiudi', { duration: 3000 });
+    }
+  });
+}
 
     getControl(path: string) {
   return this.form.get(path);

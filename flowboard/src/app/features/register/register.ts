@@ -159,16 +159,19 @@ export class RegisterComponent {
 
         this.router.navigate(['/login']);
       },
-      error: (err) => {
-        this.loading = false;
+          error: err => {
+      let message = 'Errore durante la registrazione';
 
-        if (err.status === 422) {
-          this.form.get('email')?.setErrors({ emailTaken: true });
-        } else {
-          this.error = true;
-           this.snackBar.open('Errore durante la registrazione', 'Chiudi', { duration: 3000 });
-        }
+      if (err.status === 401) {
+        message = err.error?.error || 'Email o password non valide';
+      } else if (err.status === 422) {
+        message = err.error?.error || 'Dati non validi';
+      } else if (err.status === 500) {
+        message = 'Errore del server';
       }
+      this.error = true;
+      this.snackBar.open(message, 'Chiudi', { duration: 3000 });
+    }
     });
   }
 

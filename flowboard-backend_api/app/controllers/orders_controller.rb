@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
 
   def create
     cart = current_user.cart
-    return render json: { error: "Carrello vuoto" }, status: :unprocessable_entity if cart.cart_items.empty?
+    return render json: { error: "Carrello vuoto" }, status: :unprocessable_entity if cart.cart_items.empty? #Errore 422
 
     order_params = params.require(:order).permit(:name, :surname, :email, :address, :cap, :city)
 

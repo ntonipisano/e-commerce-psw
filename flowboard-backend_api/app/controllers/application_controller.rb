@@ -33,4 +33,10 @@ class ApplicationController < ActionController::API
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
+
+  #Gestione globale status code 404
+  rescue_from ActiveRecord::RecordNotFound do
+    render json: { error: 'Risorsa non trovata' }, status: :not_found
+  end
 end
+
