@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!
 
   # POST /orders
-  # Crea un nuovo ordine dal carrello e svuota il carrello dopo il successo
+  # Crea un nuovo ordine a partire dal carrello e lo svuota dopo il successo
   def create
     cart = current_user.cart
     return render json: { error: "Carrello vuoto" }, status: :unprocessable_entity if cart.cart_items.empty? #Errore 422
