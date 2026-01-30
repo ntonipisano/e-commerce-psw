@@ -73,14 +73,10 @@ export class CheckoutPage {
     map(cart => cart?.cart_items ?? [])
   );
 
-  readonly total$ = this.items$.pipe(
-    map(items =>
-      items.reduce(
-        (sum, item) => sum + item.unit_price * item.quantity,
-        0
-      )
-    )
+  readonly backendTotal$ = this.cart.getCheckoutTotal().pipe(
+  map(res => res.total)
   );
+
 
   readonly shipping$ = this.form
     .get('shippingMethod')!
@@ -93,7 +89,7 @@ export class CheckoutPage {
   );
 
   readonly totalWithShipping$ = combineLatest([
-    this.total$,
+    this.backendTotal$,
     this.shippingCost$
   ]).pipe(
     map(([total, shipping]) => total + shipping)

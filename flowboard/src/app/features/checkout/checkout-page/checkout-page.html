@@ -106,7 +106,7 @@
       </ul>
 
       <p class="shipping">Spedizione: <strong>{{ shippingCost$ | async | currency:'EUR' }}</strong></p>
-      <p class="total">Totale: <strong>{{ total$ | async | currency:'EUR' }}</strong></p>
+      <p class="total">Totale: <strong>{{ backendTotal$ | async | currency:'EUR' }}</strong></p>
       <p class="total">Totale (con spedizione): <strong>{{ totalWithShipping$ | async | currency:'EUR' }}</strong></p>
     } @else {
       <p>Il carrello è vuoto</p>

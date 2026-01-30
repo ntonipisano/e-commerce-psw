@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   resources :products, only: [:index, :show]
 
   # CART
-  resource :cart, only: [:show], controller: 'cart'
+  resource :cart, only: [:show], controller: 'cart' do
+    get 'summary', to: 'cart#summary'
+  end
   
   # CART ITEMS
   resources :cart_items, path: '/cart/items', only: [:create, :update, :destroy]

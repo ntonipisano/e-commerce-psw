@@ -69,6 +69,12 @@ export class CartService {
     );
   }
 
+  // Legge il riepilogo del carrello dal server
+  getCheckoutTotal(): Observable<{ total: number }> {
+  return this.http.get<{ total: number }>(`${this.apiUrl}/cart/summary`
+  );  
+}
+
   // Svuota il carrello locale
   clearLocal(): void {
     this.cartSubject.next(this.emptyCart);

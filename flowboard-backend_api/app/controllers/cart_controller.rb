@@ -7,4 +7,16 @@ class CartController < ApplicationController
     cart = current_user.cart || current_user.create_cart
     render json: cart, include: { cart_items: { include: :product } }
   end
+
+  # GET /cart/summary
+  def summary
+  cart = current_user.cart
+  total = cart.cart_items.sum { |i| i.quantity * i.unit_price }
+
+  render json: {
+    total: total,
+    items: cart.cart_items.includes(:product)
+    }
+  end
+
 end
