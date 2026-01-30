@@ -122,23 +122,23 @@ Rappresenta un prodotto salvato nella wishlist dell'utente.
 ### Checkout
 
 * L'utente visualizza il riepilogo del carrello
-* Viene calcolato il totale
-* Conferma dell'ordine con l'invio al backend e salvataggio sul database
+* Viene calcolato il totale dal backend: il frontend fa una chiamata http e lo riceve
+* Conferma dell'ordine: il backend crea l'ordine leggendo il carrello persistente e lo salva sul database
 
 ---
 
 ### Ordine
 
 * Il backend crea un Order e i relativi OrderItem
-* Il carrello viene svuotato
-* L'utente può visualizzare lo storico ordini
+* Alla creazione il carrello viene svuotato
+* L'utente può visualizzare lo storico ordini con tutte le informazioni
 
 ---
 
 ### Wishlist
 
 * Dopo il login (ricezione token dal backend) viene caricata la wishlist (se esiste sul db) dell'utente
-* L'utente può visualizzarla dal suo interno può navigare alla pagina dettaglio prodotto, aggiungere il prodotto al carrello e rimuoverlo dalla wishlist
+* Dal suo interno l'utente può navigare alla pagina dettaglio prodotto, aggiungere il prodotto al carrello e rimuoverlo dalla wishlist
 
 ---
 
