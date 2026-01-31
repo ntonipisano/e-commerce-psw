@@ -4,12 +4,12 @@
 
 Il progetto è un'applicazione **full‑stack e‑commerce** composta da:
 
-* **Backend**: Ruby on Rails (API REST)
-* **Frontend**: Angular + Angular Material
+* **Backend**: Ruby on Rails (API REST) (directory flowboard-backend_api)
+* **Frontend**: Angular (directory flowboard)
 * **Autenticazione**: JWT Devise
 * **Database**: MySQL
 
-L'obiettivo è fornire un flusso completo di acquisto: autenticazione utente, gestione del carrello persistente, checkout, creazione dell'ordine.
+L'obiettivo è fornire un flusso completo di acquisto: autenticazione utente, gestione del carrello persistente, checkout, creazione dell'ordine, e altre funzionalità classiche di un e-commerce.
 
 ## Funzionalità avanzate implementate
 
