@@ -160,11 +160,13 @@ export class RegisterComponent {
         this.router.navigate(['/login']);
       },
           error: err => {
+            this.loading = false;
       let message = 'Errore durante la registrazione';
 
       if (err.status === 401) {
         message = err.error?.error || 'Email o password non valide';
       } else if (err.status === 422) {
+        this.form.get('email')?.setErrors({ emailTaken: true });
         message = err.error?.error || 'Dati non validi';
       } else if (err.status === 500) {
         message = 'Errore del server';

@@ -31,7 +31,7 @@ export class WishlistPage {
   private CartService = inject(CartService);
   private snackBar = inject(MatSnackBar);
   
-    protected readonly wishlist$ = this.wishlistService.loadWishlist().pipe(
+    protected readonly wishlist$ = this.wishlistService.wishlist$.pipe(
     map(items =>
       items.map(item => ({
         ...item,
@@ -51,6 +51,10 @@ export class WishlistPage {
       return of([]);
     })
   );
+
+    ngOnInit(): void {
+    this.wishlistService.loadWishlist().subscribe();
+  }
 
 remove(productId: number) {
   this.wishlistService.remove(productId).subscribe({

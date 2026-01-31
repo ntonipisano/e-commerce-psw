@@ -25,7 +25,7 @@
         <ul class="no-bullets">
           @for (item of order.items; track item.product.id) {
             <li><img mat-card-image [src]="item.product.thumbnail" class="small-thumbnail" routerLink="/products/{{ item.product.id }}">
-              <a [routerLink]="['/products', item.product.id]"> {{ item.product.title }} </a>, Quantità: {{ item.quantity }}, Prezzo unitario: {{ item.unit_price | currency:'EUR' }}</li>
+              <a [routerLink]="['/products', item.product.id]"> {{ item.product.title }} </a>Quantità: {{ item.quantity }}, Prezzo unitario: {{ item.unit_price | currency:'EUR' }}</li>
           }
         </ul>
       </mat-card-content>
